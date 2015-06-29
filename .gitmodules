@@ -1,0 +1,3 @@
+[submodule "deploy-it"]
+	path = deploy-it
+	url = https://github.com/jbox-web/deploy-it.git
