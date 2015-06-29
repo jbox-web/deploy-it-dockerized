@@ -29,12 +29,12 @@ You will need to set your own config for this settings :
 
 Settings | Format
 ---------|--------
-<RAILS GENERATED SECRET>              | Random secret (64 characters)
-<FAYE GENERATED SECRET>               | Random secret (64 characters)
-<DATABASE PASSWORD>                   | Database user password
-<DEPLOYIT ACCESS URL>                 | The url you want to use to access to DeployIt (ex: http://deployit.example.net:5000 or https://deployit.example.net)
-<DEPLOYIT DOMAIN NAME>                | The default domain name for newly created applications
-<DOCKER PRIVATE REGISTRY DOMAIN NAME> | The domaine name of your own Docker Private Registry (private-registry.example.net)
+```<RAILS GENERATED SECRET>```              | Random secret (64 characters)
+```<FAYE GENERATED SECRET>```               | Random secret (64 characters)
+```<DATABASE PASSWORD>```                   | Database user password
+```<DEPLOYIT ACCESS URL>```                 | The url you want to use to access to DeployIt (ex: http://deployit.example.net:5000 or https://deployit.example.net)
+```<DEPLOYIT DOMAIN NAME>```                | The default domain name for newly created applications
+```<DOCKER PRIVATE REGISTRY DOMAIN NAME>``` | The domaine name of your own Docker Private Registry (private-registry.example.net)
 
     ## Rails vars
     RAILS_ENV=production
