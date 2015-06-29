@@ -1,0 +1,65 @@
+web:
+  build: .
+  dockerfile: Dockerfile-web
+  command: /sbin/my_init
+  user: root
+  ports:
+    - '0.0.0.0:5000:80'
+  links:
+    - db
+    - redis
+    - sidekiq
+  volumes_from:
+    - data
+  env_file:
+    - ./deploy-it.env
+
+ssh:
+  build: .
+  dockerfile: Dockerfile-ssh
+  command: /sbin/my_init
+  user: root
+  ports:
+    - '0.0.0.0:2222:22'
+  links:
+    - db
+    - web
+  volumes_from:
+    - data
+  env_file:
+    - ./deploy-it.env
+
+sidekiq:
+  build: .
+  dockerfile: Dockerfile-sidekiq
+  command: /sbin/my_init
+  user: root
+  links:
+    - db
+    - redis
+  volumes_from:
+    - data
+  env_file:
+    - ./deploy-it.env
+
+data:
+  image: deployit_web
+  command: echo "Data-only container for DeployIt"
+  volumes:
+    - /data/deploy-it:/data
+    - /data/deploy-it/ssh:/home/deploy-it/.ssh
+    - /data/deploy-it/mysql:/var/lib/mysql
+    - /var/run/docker.sock:/var/run/docker.sock
+
+db:
+  image: mariadb
+  volumes_from:
+    - data
+  environment:
+    MYSQL_DATABASE: deployit
+    MYSQL_USER: deployit
+    MYSQL_PASSWORD: USER_PASSWORD
+    MYSQL_ROOT_PASSWORD: ROOT_PASSWORD
+
+redis:
+  image: redis

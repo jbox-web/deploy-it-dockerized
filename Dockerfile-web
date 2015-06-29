@@ -1,0 +1,54 @@
+FROM deployit:base
+MAINTAINER Nicolas Rodriguez "nrodriguez@jbox-web.com"
+
+# Create services directories
+RUN mkdir -p /etc/service/nginx
+RUN mkdir -p /etc/service/puma
+RUN mkdir -p /etc/service/faye
+
+# Copy start scripts
+ADD conf/runit/start-nginx.sh /etc/service/nginx/run
+ADD conf/runit/start-puma.sh  /etc/service/puma/run
+ADD conf/runit/start-faye.sh  /etc/service/faye/run
+RUN chmod +x /etc/service/*/run
+
+# Copy Nginx conf
+ADD conf/nginx/nginx.conf   /etc/nginx/nginx.conf
+ADD conf/nginx/default.conf /etc/nginx/sites-available/default
+
+# Copy Gemfile to prepare bundle install
+ADD deploy-it/Gemfile      /home/deploy-it/Gemfile
+ADD deploy-it/Gemfile.lock /home/deploy-it/Gemfile.lock
+
+# Set current dir and environment
+WORKDIR /home/deploy-it
+USER deploy-it
+ENV GEM_HOME /home/deploy-it/.gems
+ENV BUNDLE_APP_CONFIG /home/deploy-it/.bundler
+
+# Install bundler for deploy-it user
+RUN gem install bundler
+
+# Install gems for deploy-it user
+RUN bundle install --without development test --deployment
+
+# Switch user
+USER root
+
+# Copy the entire project
+ADD deploy-it /home/deploy-it
+
+# Copy configuration
+ADD deploy-it.env /home/deploy-it/deploy-it.env
+
+# Create some directories
+RUN mkdir /home/deploy-it/tmp
+
+# Chown some directories
+RUN chown -R deploy-it.deploy-it /home/deploy-it/log
+RUN chown -R deploy-it.deploy-it /home/deploy-it/tmp
+RUN chown -R deploy-it.deploy-it /home/deploy-it/public
+
+# Compile assets
+USER deploy-it
+RUN /bin/bash -c 'while read -r line ; do if [ -z "$line" ] ; then continue ; fi ; if [[ ${line:0:1} == "#" ]] ; then continue ; fi ; export $line ; done < deploy-it.env && bundle exec rake assets:precompile'
