@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Deploy&#39;It - Dockerized by jbox-web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Deploy&#39;It - Dockerized</h1>
+      <h2 class="project-tagline">Host your own private Heroku, easy ;)</h2>
+      <a href="https://github.com/jbox-web/deploy-it-dockerized" class="btn">View on GitHub</a>
+      <a href="https://github.com/jbox-web/deploy-it-dockerized/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/jbox-web/deploy-it-dockerized/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><a href="https://github.com/jbox-web/deploy-it-dockerized/blob/master/LICENSE"><img src="https://img.shields.io/github/license/jbox-web/deploy-it-dockerized.svg" alt="GitHub license"></a></p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>You will need :</p>
+
+<ul>
+<li>Docker</li>
+<li>Docker Registry</li>
+</ul>
+
+<p>to be installed before installing DeployIt.</p>
+
+<p><strong>1)</strong> First checkout the repository and init submodules :</p>
+
+<div class="highlight highlight-sh"><pre>root# git clone https://github.com/jbox-web/deploy-it-dockerized.git deploy-it
+root# <span class="pl-c1">cd</span> deploy-it
+root# git submodule init
+root# git submodule update</pre></div>
+
+<p><strong>2)</strong> Build Docker base image</p>
+
+<div class="highlight highlight-sh"><pre>root# <span class="pl-c1">cd</span> image-base
+root# docker build -t deploy_it:base <span class="pl-c1">.</span></pre></div>
+
+<p><strong>3)</strong> Create a configuration file called <code>deploy-it.env</code> with environment variables within :</p>
+
+<p>You will need to set your own config for this settings :</p>
+
+<table>
+<thead>
+<tr>
+<th>Settings</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;RAILS GENERATED SECRET&gt;</code></td>
+<td>Random secret (64 characters)</td>
+</tr>
+<tr>
+<td><code>&lt;FAYE GENERATED SECRET&gt;</code></td>
+<td>Random secret (64 characters)</td>
+</tr>
+<tr>
+<td><code>&lt;DATABASE PASSWORD&gt;</code></td>
+<td>Database user password</td>
+</tr>
+<tr>
+<td><code>&lt;DEPLOYIT ACCESS URL&gt;</code></td>
+<td>The url you want to use to access to DeployIt (ex: <a href="http://deployit.example.net:5000">http://deployit.example.net:5000</a> or <a href="https://deployit.example.net">https://deployit.example.net</a>)</td>
+</tr>
+<tr>
+<td><code>&lt;DEPLOYIT DOMAIN NAME&gt;</code></td>
+<td>The default domain name for newly created applications</td>
+</tr>
+<tr>
+<td><code>&lt;DOCKER PRIVATE REGISTRY DOMAIN NAME&gt;</code></td>
+<td>The domaine name of your own Docker Private Registry (private-registry.example.net)</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-sh"><pre><span class="pl-c">## Rails vars</span>
+RAILS_ENV=production
+RAILS_SECRET=<span class="pl-k">&lt;</span>RAILS GENERATED SECRET<span class="pl-k">&gt;</span>
+
+<span class="pl-c">## Database config</span>
+DB_ADAPTER=mysql2
+DB_HOST=db
+DB_PORT=3306
+DB_NAME=deployit
+DB_USER=deployit
+DB_PASS=<span class="pl-k">&lt;</span>DATABASE PASSWORD<span class="pl-k">&gt;</span>
+
+<span class="pl-c">## Redis config</span>
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+<span class="pl-c">## DeployIt config</span>
+
+<span class="pl-c"># Logs</span>
+LOG_LEVEL=info
+LOG_DIR=/home/deploy-it/log
+
+<span class="pl-c"># Faye server / Async events</span>
+ACCESS_URL=<span class="pl-k">&lt;</span>DEPLOYIT ACCESS URL<span class="pl-k">&gt;</span>
+FAYE_SECRET=<span class="pl-k">&lt;</span>FAYE GENERATED SECRET<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># DeployIt authentication server</span>
+AUTHENTICATION_SERVER=http://web:80
+
+<span class="pl-c"># SSH authorized_keys file</span>
+SSH_CONFIG_FILE=/home/deploy-it/.ssh/authorized_keys
+
+<span class="pl-c"># DeployIt domain name</span>
+ACCESS_DOMAIN_NAME=<span class="pl-k">&lt;</span>DEPLOYIT DOMAIN NAME<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># Private Docker Registry</span>
+DOCKER_REGISTRY=<span class="pl-k">&lt;</span>DOCKER PRIVATE REGISTRY DOMAIN NAME<span class="pl-k">&gt;</span>
+
+<span class="pl-c"># DeployIt directories</span>
+APPLICATIONS_CLONES_DIR=/data/applications-clones
+APPLICATIONS_REPOS_DIR=/data/applications-repositories
+APPLICATIONS_DATAS_DIR=/data/deploy-it/applications-datas</pre></div>
+
+<p><strong>4)</strong> Edit <code>docker-compose.yml</code> file and set  <code>&lt;DATABASE PASSWORD&gt;</code> and <code>&lt;DATABASE ROOT PASSWORD&gt;</code> variables</p>
+
+<p><strong>5)</strong> Launch <code>install.sh</code> script :</p>
+
+<div class="highlight highlight-sh"><pre>root# ./install.sh</pre></div>
+
+<p>This will trigger Docker Compose and will build these DeployIt images/containers :</p>
+
+<ul>
+<li>Web</li>
+<li>Sidekiq</li>
+<li>SSH</li>
+<li>MySQL</li>
+<li>Redis</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/jbox-web/deploy-it-dockerized">Deploy&#39;It - Dockerized</a> is maintained by <a href="https://github.com/jbox-web">jbox-web</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-36504891-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
