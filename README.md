@@ -1,4 +1,4 @@
-## DeployIt Dockerized
+## Deploy'It - Dockerized
 
 [![GitHub license](https://img.shields.io/github/license/jbox-web/deploy-it-dockerized.svg)](https://github.com/jbox-web/deploy-it-dockerized/blob/master/LICENSE)
 
