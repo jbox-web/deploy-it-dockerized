@@ -27,7 +27,7 @@ root# git submodule update
 
 ```sh
 root# cd image-base
-root# docker build -t deploy_it:base .
+root# docker build -t deployit:base .
 ```
 
 **3)** Create a configuration file called ```deploy-it.env``` with environment variables within :
