@@ -11,7 +11,7 @@ You will need :
 * Docker
 * Docker Registry
 
-to be installed before installing DeployIt.
+to be installed before installing Deploy'It.
 
 
 **1)** First checkout the repository and init submodules :
@@ -37,9 +37,8 @@ You will need to set your own config for this settings :
 Settings | Format
 ---------|--------
 ```<RAILS GENERATED SECRET>```              | Random secret (64 characters)
-```<FAYE GENERATED SECRET>```               | Random secret (64 characters)
 ```<DATABASE PASSWORD>```                   | Database user password
-```<DEPLOYIT ACCESS URL>```                 | The url you want to use to access to DeployIt (ex: http://deployit.example.net:5000 or https://deployit.example.net)
+```<DEPLOYIT ACCESS URL>```                 | The url you want to use to access to Deploy'It (ex: http://deployit.example.net:5000 or https://deployit.example.net)
 ```<DEPLOYIT DOMAIN NAME>```                | The default domain name for newly created applications
 ```<DOCKER PRIVATE REGISTRY DOMAIN NAME>``` | The domaine name of your own Docker Private Registry (private-registry.example.net)
 
@@ -60,25 +59,25 @@ DB_PASS=<DATABASE PASSWORD>
 REDIS_HOST=redis
 REDIS_PORT=6379
 
-## DeployIt config
+## Deploy'It config
 
 # Logs
 LOG_LEVEL=info
 LOG_DIR=/home/deploy-it/log
 
-# DeployIt authentication server
+# Deploy'It authentication server
 AUTHENTICATION_SERVER=http://web:80
 
 # SSH authorized_keys file
 SSH_CONFIG_FILE=/home/deploy-it/.ssh/authorized_keys
 
-# DeployIt domain name
+# Deploy'It domain name
 ACCESS_DOMAIN_NAME=<DEPLOYIT DOMAIN NAME>
 
 # Private Docker Registry
 DOCKER_REGISTRY=<DOCKER PRIVATE REGISTRY DOMAIN NAME>
 
-# DeployIt directories
+# Deploy'It directories
 APPLICATIONS_CLONES_DIR=/data/applications-clones
 APPLICATIONS_REPOS_DIR=/data/applications-repositories
 APPLICATIONS_DATAS_DIR=/data/deploy-it/applications-datas
@@ -92,7 +91,7 @@ APPLICATIONS_DATAS_DIR=/data/deploy-it/applications-datas
 root# ./install.sh
 ```
 
-This will trigger Docker Compose and will build these DeployIt images/containers :
+This will trigger Docker Compose and will build these Deploy'It images/containers :
 
 * Web
 * Sidekiq
