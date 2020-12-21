@@ -1,15 +1,12 @@
 FROM deployit:base
-MAINTAINER Nicolas Rodriguez "nrodriguez@jbox-web.com"
 
 # Create services directories
 RUN mkdir -p /etc/service/nginx
 RUN mkdir -p /etc/service/puma
-RUN mkdir -p /etc/service/faye
 
 # Copy start scripts
 ADD conf/runit/start-nginx.sh /etc/service/nginx/run
 ADD conf/runit/start-puma.sh  /etc/service/puma/run
-ADD conf/runit/start-faye.sh  /etc/service/faye/run
 RUN chmod +x /etc/service/*/run
 
 # Copy Nginx conf

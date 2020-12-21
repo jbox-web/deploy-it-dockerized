@@ -66,10 +66,6 @@ REDIS_PORT=6379
 LOG_LEVEL=info
 LOG_DIR=/home/deploy-it/log
 
-# Faye server / Async events
-ACCESS_URL=<DEPLOYIT ACCESS URL>
-FAYE_SECRET=<FAYE GENERATED SECRET>
-
 # DeployIt authentication server
 AUTHENTICATION_SERVER=http://web:80
 

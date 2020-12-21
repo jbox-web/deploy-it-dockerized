@@ -1,12 +1,10 @@
 FROM deployit_web:latest
-MAINTAINER Nicolas Rodriguez "nrodriguez@jbox-web.com"
 
 USER root
 
 # Remove useless services
 RUN rm -rf /etc/service/nginx
 RUN rm -rf /etc/service/puma
-RUN rm -rf /etc/service/faye
 
 # Create services directories
 RUN mkdir -p /etc/service/sidekiq
